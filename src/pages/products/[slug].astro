@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import { fetchData } from "../../lib/fetch-data";
+import {Cart} from "../../components/shopping-card.component"
 import { allProducts, type ProductProps } from "../index.astro";
 import { formatPrice } from "../../utils/formatPrice";
 
@@ -43,6 +43,7 @@ const { name, image, price, about } = Astro.props as ProductProps;
         <span class="text-lg">{formatPrice(price)}</span>
         <p class="text-sm mt-2 self-center">{about}</p>
         <button class="border p-2 mt-5 self-center md:absolute md:bottom-0 md:m-0">Add to cart</button>
+        <Cart client:load />
     </div>
   </div>
 </Layout>
