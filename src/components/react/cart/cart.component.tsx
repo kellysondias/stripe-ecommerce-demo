@@ -1,37 +1,13 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { useCartStore } from "./store/cart-store.provider";
+import { formatPrice } from "../../../utils/formatPrice";
 
 export const Cart: React.FC = () => {
-  const [open, setOpen] = useState(true);
+  const { products, removeFromCart, open, setOpen } = useCartStore();
+
+  let total = 0;
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -48,7 +24,7 @@ export const Cart: React.FC = () => {
           <div className="fixed inset-0 bg-gray-500/25 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-hidden">
+        <div className="fixed inset-0 overflow-hidden text-white">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
@@ -75,59 +51,77 @@ export const Cart: React.FC = () => {
                           >
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
-                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                            <XMarkIcon
+                              className="h-6 w-6 text-white"
+                              aria-hidden="true"
+                            />
                           </button>
                         </div>
                       </div>
 
-                      <div className="mt-8">
+                      <div
+                        className={`mt-8 ${
+                          products.length === 0
+                            ? "flex flex-col items-center"
+                            : ""
+                        }`}
+                      >
                         <div className="flow-root">
-                          <ul
-                            role="list"
-                            className="-my-6 divide-y divide-gray-200"
-                          >
-                            {products.map((product) => (
-                              <li key={product.id} className="flex py-6">
-                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
-                                  />
-                                </div>
-
-                                <div className="ml-4 flex flex-1 flex-col">
-                                  <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
-                                      <h3>
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
-                                      </h3>
-                                      <p className="ml-4">{product.price}</p>
-                                    </div>
-                                    <p className="mt-1 text-sm text-white">
-                                      {product.color}
-                                    </p>
-                                  </div>
-                                  <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-white">
-                                      Quantity: {product.quantity}
-                                    </p>
-
-                                    <div className="flex">
-                                      <button
-                                        type="button"
-                                        className="font-medium text-white"
-                                      >
-                                        Remove
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
+                          {products.length === 0 ? (
+                            <span className="text-white">
+                              You have no items in the cart.
+                            </span>
+                          ) : (
+                            <>
+                              <ul
+                                role="list"
+                                className="-my-6 divide-y divide-gray-200"
+                              >
+                                {products.map((product) => {
+                                  total += Number(product.price);
+                                  return (
+                                    <li key={product.id} className="flex py-6">
+                                      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                        <img
+                                          loading="eager"
+                                          src={product.image.url}
+                                          alt={product.image.alt ?? "Product"}
+                                          className="h-full w-full object-cover object-center"
+                                        />
+                                      </div>
+                                      <div className="ml-4 flex flex-1 flex-col">
+                                        <div>
+                                          <div className="flex justify-between text-base font-medium text-gray-900">
+                                            <h3>{product.name}</h3>
+                                            <p className="ml-4">
+                                              {product.price}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex flex-1 items-end justify-between text-sm">
+                                          <p className="text-white">
+                                            Quantity: {product.quantity}
+                                          </p>
+                                          <div className="flex">
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                removeFromCart(product.id)
+                                              }
+                                              className="font-medium text-white"
+                                            >
+                                              Remove
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                              <span>Total: {formatPrice(`${total}`)}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -171,4 +165,4 @@ export const Cart: React.FC = () => {
       </Dialog>
     </Transition.Root>
   );
-}
+};

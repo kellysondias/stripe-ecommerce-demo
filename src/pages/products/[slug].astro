@@ -1,49 +1,57 @@
 ---
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import {Cart} from "../../components/shopping-card.component"
 import { allProducts, type ProductProps } from "../index.astro";
 import { formatPrice } from "../../utils/formatPrice";
+import { CartButton } from "../../components/react/cart/cart-button.component";
 
 export async function getStaticPaths() {
   return allProducts.map(
-    ({ name, slug, image, price, description, about }: ProductProps) => {
+    ({ id, name, slug, image, price, description, about }: ProductProps) => {
       return {
         params: { slug },
         props: {
+          id,
           name,
           image,
           price,
           description,
-          about
+          about,
         },
       };
     }
   );
 }
 
-const { name, image, price, about } = Astro.props as ProductProps;
+const product = Astro.props as ProductProps;
 ---
 
-<Layout title={`Product: ${name}`} hasHeader={false}>
-  <div class="flex flex-col justify-evenly items-center relative my-10 md:m-0 md:flex-row">
+<Layout title={`Product: ${product.name}`} hasHeader={false}>
+  <div
+    class="flex flex-col justify-evenly items-center relative my-10 md:m-0 md:flex-row"
+  >
     <div>
-        <div class="w-80">
-            <Image
-              src={image.url}
-              alt={image.alt ?? "Product"}
-              width={image.width}
-              height={image.height}
-              loading="eager"
-            />
-        </div>
+      <div class="w-80">
+        <Image
+          src={product.image.url}
+          alt={product.image.alt ?? "Product"}
+          width={product.image.width}
+          height={product.image.height}
+          loading="eager"
+        />
+      </div>
     </div>
     <div class="flex flex-col text-center w-3/6 md:self-start">
-        <h1 class="my-2 text-xl font-bold md:mt-0">{name}</h1>
-        <span class="text-lg">{formatPrice(price)}</span>
-        <p class="text-sm mt-2 self-center">{about}</p>
-        <button class="border p-2 mt-5 self-center md:absolute md:bottom-0 md:m-0">Add to cart</button>
-        <Cart client:load />
+      <h1 class="my-2 text-xl font-bold md:mt-0">{product.name}</h1>
+      <span class="text-lg">{formatPrice(product.price)}</span>
+      <p class="text-sm mt-2 self-center">{product.about}</p>
+      <CartButton
+        className="border p-2 mt-5 self-center md:absolute md:bottom-0 md:m-0"
+        {product}
+        client:load
+      >
+        Add to cart
+      </CartButton>
     </div>
   </div>
 </Layout>

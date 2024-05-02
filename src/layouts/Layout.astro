@@ -1,7 +1,9 @@
 ---
+//Main page (index.astro)
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
-import { Cart } from "../components/shopping-card.component";
+import { Cart } from "../components/react/cart/cart.component";
+import { useCartStore } from "../components/react/cart/store/cart-store/cart/store/cart-store";
 
 interface Props {
   title?: string;
@@ -29,6 +31,7 @@ const { title, hasHeader = true } = Astro.props;
         {hasHeader && <h1 class="text-4xl my-5">Stripe Ecommerce</h1>}
         <main>
           <slot />
+          <Cart client:load />
         </main>
       </div>
     </Theme>
