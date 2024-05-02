@@ -1,5 +1,5 @@
 import type { ProductProps } from "../../../pages/index.astro";
-import { useCartStore } from "./store/cart-store.provider";
+import { useCartStore } from "./store/cart-store";
 
 interface Props {
   children: string;

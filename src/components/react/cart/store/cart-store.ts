@@ -1,4 +1,3 @@
-//cart store
 import { create } from "zustand";
 import type { ProductProps } from "../../../../pages/index.astro";
 
