@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCartStore } from "./store/cart-store";
 import { formatPrice } from "../../../utils/formatPrice";
 
-export const CartUI: React.FC = () => {
+export const Cart: React.FC = () => {
   const { products, open, setOpen, removeFromCart } = useCartStore();
   let total = 0;
 
