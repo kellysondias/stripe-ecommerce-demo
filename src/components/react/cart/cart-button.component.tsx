@@ -14,8 +14,10 @@ export const CartButton: React.FC<Props> = ({
 }) => {
   const { addToCart, setOpen } = useCartStore();
 
+  const { id } = product;
+
   const handleCartState = () => {
-    addToCart(product);
+    addToCart(id, product);
     setOpen(true);
   };
 

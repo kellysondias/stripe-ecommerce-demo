@@ -4,6 +4,8 @@ import Layout from "../../layouts/Layout.astro";
 import { allProducts, type ProductProps } from "../index.astro";
 import { formatPrice } from "../../utils/formatPrice";
 import { CartButton } from "../../components/react/cart/cart-button.component";
+import { Cart } from "../../components/react/cart/cart.component";
+import { QuantityButton } from "./quantity-button/quantity-button.component";
 
 export async function getStaticPaths() {
   return allProducts.map(
@@ -23,28 +25,30 @@ export async function getStaticPaths() {
   );
 }
 
-const product = Astro.props as ProductProps;
+const product = { ...(Astro.props as ProductProps) };
+const { id, name, image, price, about } = product;
 ---
 
-<Layout title={`Product: ${product.name}`} hasHeader={false}>
+<Layout title={`Product: ${name}`} hasHeader={false}>
   <div
     class="flex flex-col justify-evenly items-center relative my-10 md:m-0 md:flex-row"
   >
     <div>
       <div class="w-80">
         <Image
-          src={product.image.url}
-          alt={product.image.alt ?? "Product"}
-          width={product.image.width}
-          height={product.image.height}
+          src={image.url}
+          alt={image.alt ?? "Product"}
+          width={image.width}
+          height={image.height}
           loading="eager"
         />
       </div>
     </div>
     <div class="flex flex-col text-center w-3/6 md:self-start">
-      <h1 class="my-2 text-xl font-bold md:mt-0">{product.name}</h1>
-      <span class="text-lg">{formatPrice(product.price)}</span>
-      <p class="text-sm mt-2 self-center">{product.about}</p>
+      <h1 class="my-2 text-xl font-bold md:mt-0">{name}</h1>
+      <span class="text-lg">{formatPrice(price)}</span>
+      <p class="text-sm mt-2 self-center">{about}</p>
+      <QuantityButton client:load {id} {allProducts} />
       <CartButton
         className="border p-2 mt-5 self-center md:absolute md:bottom-0 md:m-0"
         {product}
@@ -52,6 +56,7 @@ const product = Astro.props as ProductProps;
       >
         Add to cart
       </CartButton>
+      <Cart client:load />
     </div>
   </div>
 </Layout>
