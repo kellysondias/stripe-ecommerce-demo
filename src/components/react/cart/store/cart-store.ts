@@ -36,13 +36,10 @@ export const useCartStore = create(
             (CartProduct) => CartProduct.id === product.id
           );
 
-          
           if (hasId) {
-            toast("Product already in the cart")
+            toast("Product already in the cart");
           }
-            
 
-          
           return !hasId
             ? {
                 products: [...products, { ...product, ...details }],
