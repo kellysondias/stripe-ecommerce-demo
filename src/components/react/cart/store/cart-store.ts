@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { ProductProps } from "../../../../pages/index.astro";
 import { persist } from "zustand/middleware";
+import { toast } from "sonner";
 
 interface Details {
   id?: string;
@@ -35,6 +36,13 @@ export const useCartStore = create(
             (CartProduct) => CartProduct.id === product.id
           );
 
+          
+          if (hasId) {
+            toast("Product already in the cart")
+          }
+            
+
+          
           return !hasId
             ? {
                 products: [...products, { ...product, ...details }],

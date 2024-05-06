@@ -6,6 +6,7 @@ import { formatPrice } from "../../utils/formatPrice";
 import { CartButton } from "../../components/react/cart/cart-button.component";
 import { Cart } from "../../components/react/cart/cart.component";
 import { QuantityButton } from "./quantity-button/quantity-button.component";
+import { Toaster } from "sonner";
 
 export async function getStaticPaths() {
   return allProducts.map(
@@ -57,6 +58,11 @@ const { id, name, image, price, about } = product;
         Add to cart
       </CartButton>
       <Cart client:load />
+      <Toaster
+        client:load
+        toastOptions={{ className: "bg-gray-900 text-white rounded-none z-30" }}
+        position="bottom-left"
+      />
     </div>
   </div>
 </Layout>
