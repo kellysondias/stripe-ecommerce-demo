@@ -2,14 +2,20 @@ import { create } from "zustand";
 import type { ProductProps } from "../../../../pages/index.astro";
 import { persist } from "zustand/middleware";
 
-type CartProduct = ProductProps & { quantity?: number };
+interface Details {
+  id?: string;
+  quantity?: number;
+  size?: "XS" | "S" | "M" | "L" | "XL" | "XXL";
+}
+
+type CartProduct = ProductProps & Details;
 
 interface CartState {
   open: boolean;
   products: CartProduct[];
-  quantity: object;
+  details: Details[] | {};
   addToCart: (id: string, product: ProductProps) => void;
-  setQuantity: (productId: string, quantity: number) => void;
+  setDetails: (productId: string, details: Partial<Details>) => void;
   removeFromCart: (productId: string) => void;
   setOpen: (open: boolean) => void;
 }
@@ -21,16 +27,16 @@ export const useCartStore = create(
     (set) => ({
       open: false,
       products: [],
-      quantity: {},
+      details: {},
       setOpen: (open) => set({ open }),
-      addToCart: (id: string, product: ProductProps) =>
-        set(({ products }) => ({
+      addToCart: (id: string, product: ProductProps) => {
+        set(({ products, details }) => ({
           products: [...products, { ...product }],
-        })),
-      setQuantity: (productId, newQuantity) =>
-        set((state) => ({
-          ...state,
-          quantity: { id: productId, count: newQuantity },
+        }));
+      },
+      setDetails: (productId, newDetails) =>
+        set(({ details }) => ({
+          details: { ...details, productId, ...newDetails },
         })),
       removeFromCart: (productId) =>
         set(({ products }) => ({

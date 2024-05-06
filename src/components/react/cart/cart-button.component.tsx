@@ -12,7 +12,7 @@ export const CartButton: React.FC<Props> = ({
   product,
   className,
 }) => {
-  const { addToCart, setOpen } = useCartStore();
+  const { addToCart, setOpen, products } = useCartStore();
 
   const { id } = product;
 
@@ -20,6 +20,8 @@ export const CartButton: React.FC<Props> = ({
     addToCart(id, product);
     setOpen(true);
   };
+
+  //console.log("🚀 ~ products:", products)
 
   return (
     <button onClick={handleCartState} className={`${className}`}>

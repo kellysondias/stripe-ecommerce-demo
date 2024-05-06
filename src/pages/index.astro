@@ -18,6 +18,7 @@ export interface ProductProps {
   price: `${number}`;
   description: string;
   about: string;
+  tag?: string;
 }
 
 export const { allProducts } = await fetchData(`
