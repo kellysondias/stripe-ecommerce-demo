@@ -14,7 +14,7 @@ interface CartState {
   open: boolean;
   products: CartProduct[];
   details: Details[] | {};
-  addToCart: (id: string, product: ProductProps) => void;
+  addToCart: (product: ProductProps) => void;
   setDetails: (id: string, details: Partial<Details>) => void;
   removeFromCart: (productId: string) => void;
   setOpen: (open: boolean) => void;
@@ -29,10 +29,18 @@ export const useCartStore = create(
       products: [],
       details: {},
       setOpen: (open) => set({ open }),
-      addToCart: (id: string, product: ProductProps) => {
-        set(({ products, details }) => ({
-          products: [...products, { ...product, ...details }],
-        }));
+      addToCart: (product: ProductProps) => {
+        set(({ products, details }) => {
+          const hasId = products.find(
+            (CartProduct) => CartProduct.id === product.id
+          );
+
+          return !hasId
+            ? {
+                products: [...products, { ...product, ...details }],
+              }
+            : {};
+        });
       },
       setDetails: (id, newDetails) =>
         set(({ details }) => ({
