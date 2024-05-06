@@ -36,7 +36,13 @@ export const useCartStore = create(
       },
       setDetails: (productId, newDetails) =>
         set(({ details }) => ({
-          details: { ...details, productId, ...newDetails },
+          details: {
+            ...details,
+            productId,
+            options: {
+              ...newDetails,
+            },
+          },
         })),
       removeFromCart: (productId) =>
         set(({ products }) => ({
