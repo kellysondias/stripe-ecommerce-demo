@@ -21,7 +21,7 @@ export const CartButton: React.FC<Props> = ({
     setOpen(true);
   };
 
-  //console.log("🚀 ~ products:", products)
+  console.log("🚀 ~ products:", products)
 
   return (
     <button onClick={handleCartState} className={`${className}`}>

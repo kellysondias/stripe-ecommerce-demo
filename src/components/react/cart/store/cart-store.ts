@@ -31,7 +31,7 @@ export const useCartStore = create(
       setOpen: (open) => set({ open }),
       addToCart: (id: string, product: ProductProps) => {
         set(({ products, details }) => ({
-          products: [...products, { ...product }],
+          products: [...products, { ...product, ...details }],
         }));
       },
       setDetails: (productId, newDetails) =>
