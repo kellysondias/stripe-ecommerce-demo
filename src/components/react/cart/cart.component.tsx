@@ -76,7 +76,7 @@ export const Cart: React.FC = () => {
                                   className="-my-6 divide-y divide-gray-200"
                                 >
                                   {products.map((product) => {
-                                    total += Number(product.price);
+                                    total += Number(product.price * product.quantity!);
                                     return (
                                       <li
                                         key={product.id}
