@@ -15,7 +15,7 @@ export const QuantityButton: React.FC<Props> = ({ id }) => {
   console.log("🚀 ~ details:", details);
 
   return (
-    <div className="mt-5 flex justify-center items-center text-center my-0 mx-auto text-xl select-none">
+    <div className="mt-5 flex justify-center items-center text-center mx-auto text-xl select-none">
       <button className="bold self-center" onClick={() => setCount(count + 1)}>
         <i>+</i>
       </button>
