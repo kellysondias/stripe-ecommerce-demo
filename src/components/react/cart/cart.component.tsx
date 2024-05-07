@@ -3,6 +3,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCartStore } from "./store/cart-store";
 import { formatPrice } from "../../../utils/formatPrice";
+import { CheckoutButton } from "./checkout-button.component";
+import { Toaster } from "sonner";
 
 export const Cart: React.FC = () => {
   const { products, open, setOpen, removeFromCart } = useCartStore();
@@ -125,7 +127,7 @@ export const Cart: React.FC = () => {
                                       );
                                     })}
                                   </ul>
-                                  <span>Total: {formatPrice(`${total}`)}</span>
+                                  <span>Total: {formatPrice(total)}</span>
                                 </>
                               )}
                             </div>
@@ -139,14 +141,7 @@ export const Cart: React.FC = () => {
                           <p className="mt-0.5 text-sm text-white">
                             Shipping and taxes calculated at checkout.
                           </p>
-                          <div className="mt-6">
-                            <a
-                              href="#"
-                              className="flex items-center justify-center  border px-6 py-3 text-base font-medium text-white shadow-sm "
-                            >
-                              Checkout
-                            </a>
-                          </div>
+                          <CheckoutButton />
                           <div className="mt-6 flex justify-center text-center text-sm text-white">
                             <p>
                               or{" "}

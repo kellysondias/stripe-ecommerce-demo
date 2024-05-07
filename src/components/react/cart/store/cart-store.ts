@@ -16,7 +16,7 @@ interface CartState {
   products: CartProduct[];
   details: Details[] | {};
   addToCart: (product: ProductProps) => void;
-  setDetails: (id: string, details: Partial<Details>) => void;
+  setDetail: (id: string, details: Partial<Details>) => void;
   removeFromCart: (productId: string) => void;
   setOpen: (open: boolean) => void;
 }
@@ -47,7 +47,7 @@ export const useCartStore = create(
             : {};
         });
       },
-      setDetails: (id, newDetails) =>
+      setDetail: (id, newDetails) =>
         set(({ details }) => ({
           details: {
             ...details,

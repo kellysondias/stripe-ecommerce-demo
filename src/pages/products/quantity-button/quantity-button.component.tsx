@@ -8,10 +8,10 @@ interface Props {
 }
 
 export const QuantityButton: React.FC<Props> = ({ id }) => {
-  const { setDetails, details } = useCartStore();
+  const { setDetail } = useCartStore();
   const [count, setCount] = useState(1);
 
-  useEffect(() => setDetails(id, { quantity: count }), [count]);
+  useEffect(() => setDetail(id, { quantity: count }), [count]);
 
   return (
     <div className="mt-5 flex justify-center items-center text-center mx-auto text-xl select-none">
