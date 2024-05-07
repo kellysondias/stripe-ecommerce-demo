@@ -1,5 +1,6 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { useCartStore } from "./store/cart-store";
+import { fetchFromAPI } from "../../../utils/fetchFromApi";
 
 const API = "http://localhost:3000";
 
@@ -18,15 +19,8 @@ export const CheckoutButton = () => {
     const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY!);
 
     const stripe = await stripePromise;
-    const response = await fetch(`${API}/api/v1/checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    });
-
-    const session = await response.json();
+    const response = await fetchFromAPI("/api/v1/checkout", body as any);
+    const { session } = await response.json();
     console.log("🚀 ~ handleCheckout ~ session:", session);
     await stripe?.redirectToCheckout({ sessionId: session.id });
   };
