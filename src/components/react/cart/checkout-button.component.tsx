@@ -27,8 +27,6 @@ export const CheckoutButton = () => {
     await stripe?.redirectToCheckout({ sessionId: id });
   };
 
-  handleCheckout();
-
   return (
     <div onClick={handleCheckout} className="mt-6 cursor-pointer">
       <div className="flex items-center justify-center  border px-6 py-3 text-base font-medium text-white shadow-sm">
