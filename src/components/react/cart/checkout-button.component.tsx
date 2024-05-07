@@ -1,29 +1,33 @@
 import { loadStripe } from "@stripe/stripe-js";
-import { useCartStore } from "./store/cart-store";
+import { useCartStore, type CartProduct } from "./store/cart-store";
 import { fetchFromAPI } from "../../../utils/fetchFromApi";
-
-const API = "http://localhost:3000";
 
 export const CheckoutButton = () => {
   const { products } = useCartStore();
 
-  const body = JSON.stringify(products);
-
-  if (!products) {
-    console.log("Empty cart");
-    return;
-  }
-  console.log("🚀 ~ CheckoutButton ~ products:", products);
+  const body = products.map(({ name, image: { url }, description, price }) => ({
+    name,
+    image: url,
+    description,
+    price,
+  }));
 
   const handleCheckout = async () => {
-    const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY!);
-    console.log("🚀 ~ handleCheckout ~ import.meta.env.STRIPE_PUBLISHABLE_KEY:", import.meta.env.STRIPE_PUBLISHABLE_KEY)
+    const stripePromise = loadStripe(
+      import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY!
+    );
 
     const stripe = await stripePromise;
-    const response = await fetchFromAPI("/api/v1/checkout", body as any);
-    const { session } = await response.json();
-    await stripe?.redirectToCheckout({ sessionId: session.id });
+
+    const { price } = await fetchFromAPI("/api/v1/create-price", body as any);
+
+    const {
+      session: { id },
+    } = await fetchFromAPI("/api/v1/checkout", price as any);
+    await stripe?.redirectToCheckout({ sessionId: id });
   };
+
+  handleCheckout();
 
   return (
     <div onClick={handleCheckout} className="mt-6 cursor-pointer">

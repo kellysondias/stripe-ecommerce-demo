@@ -9,7 +9,7 @@ interface Details {
   size?: "XS" | "S" | "M" | "L" | "XL" | "XXL";
 }
 
-type CartProduct = ProductProps & Details;
+export type CartProduct = ProductProps & Details;
 
 interface CartState {
   open: boolean;
