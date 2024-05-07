@@ -17,11 +17,11 @@ export const CheckoutButton = () => {
 
   const handleCheckout = async () => {
     const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY!);
+    console.log("🚀 ~ handleCheckout ~ import.meta.env.STRIPE_PUBLISHABLE_KEY:", import.meta.env.STRIPE_PUBLISHABLE_KEY)
 
     const stripe = await stripePromise;
     const response = await fetchFromAPI("/api/v1/checkout", body as any);
     const { session } = await response.json();
-    console.log("🚀 ~ handleCheckout ~ session:", session);
     await stripe?.redirectToCheckout({ sessionId: session.id });
   };
 
