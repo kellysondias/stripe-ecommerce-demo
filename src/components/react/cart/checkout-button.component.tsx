@@ -1,16 +1,23 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { useCartStore, type CartProduct } from "./store/cart-store";
-import { fetchFromAPI } from "../../../utils/fetchFromApi";
+import { postToAPI } from "../../../utils/postToApi";
 
 export const CheckoutButton = () => {
   const { products } = useCartStore();
 
-  const body = products.map(({ name, image: { url }, description, price }) => ({
-    name,
-    image: url,
-    description,
-    price,
-  }));
+  let productQuantity: number | undefined;
+
+  const body = products.map(
+    ({ name, image: { url }, description, price, quantity }) => {
+      return {
+        name,
+        image: url,
+        description,
+        price,
+        quantity,
+      };
+    }
+  );
 
   const handleCheckout = async () => {
     const stripePromise = loadStripe(
@@ -19,12 +26,19 @@ export const CheckoutButton = () => {
 
     const stripe = await stripePromise;
 
-    const { price } = await fetchFromAPI("/api/v1/create-price", body as any);
+    const { prices } = await postToAPI("create-price", body);
+    console.log("🚀 ~ handleCheckout ~ body:", body)
+
+    const line_items = prices.map((price: string, index: number) => ({
+      price,
+      quantity: body[index].quantity,
+    }));
 
     const {
-      session: { id },
-    } = await fetchFromAPI("/api/v1/checkout", price as any);
-    await stripe?.redirectToCheckout({ sessionId: id });
+      id: sessionId
+    } = await postToAPI("checkout", line_items);
+
+    await stripe?.redirectToCheckout({ sessionId });
   };
 
   return (
