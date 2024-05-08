@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCartStore } from "./store/cart-store";
 import { formatPrice } from "../../../utils/formatPrice";
-import { CheckoutButton } from "./checkout-button.component";
+import { CheckoutButton } from "./checkout-button/checkout-button.component";
 import { Toaster } from "sonner";
 
 export const Cart: React.FC = () => {

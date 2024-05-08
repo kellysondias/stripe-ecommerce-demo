@@ -1,11 +1,9 @@
 import { loadStripe } from "@stripe/stripe-js";
-import { useCartStore, type CartProduct } from "./store/cart-store";
-import { postToAPI } from "../../../utils/postToApi";
+import { useCartStore } from "../store/cart-store";
+import { postToAPI } from "../../../../utils/postToApi";
 
 export const CheckoutButton = () => {
   const { products } = useCartStore();
-
-  let productQuantity: number | undefined;
 
   const body = products.map(
     ({ name, image: { url }, description, price, quantity }) => {
